@@ -1,0 +1,7 @@
+[submodule "frontend"]
+	path = frontend
+	url = git@github.com:tonycava/ynoverflow-front.git
+
+[submodule "backend"]
+	path = backend
+	url = git@github.com:tonycava/ynoverflow-back.git
