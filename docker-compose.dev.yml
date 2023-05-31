@@ -18,8 +18,8 @@ services:
   front:
     container_name: ynoverflow_front
     build:
-      context: frontend
-      dockerfile: frontend/Dockerfile.dev
+      context: ./frontend
+      dockerfile: Dockerfile.dev
     restart: always
     environment:
       PORT: ${FRONTEND_PORT}
@@ -29,14 +29,14 @@ services:
       - ./frontend/src:/app/src
       - ./frontend/.svelte-kit:/app/.svelte-kit
       - ./frontend/static:/app/static
-      - ./frontend/tailwind.config.cjs:/app/tailwind.config.cjs
+#      - ./frontend/tailwind.config.cjs:/app/tailwind.config.cjs
       - ./.env:/app/.env
 
   back:
     container_name: ynoverflow_back
     build:
       context: backend
-      dockerfile: backend/Dockerfile.dev
+      dockerfile: Dockerfile.dev
     restart: always
     volumes:
       - ./backend:/app
