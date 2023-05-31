@@ -1,0 +1,49 @@
+version: "3.7"
+
+services:
+  db:
+    image: postgres:12.2-alpine
+    container_name: ynoverflow_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ynoverflow-vol:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+    ports:
+      - "11000:5432"
+
+  front:
+    container_name: ynoverflow_front
+    build:
+      context: frontend
+      dockerfile: frontend/Dockerfile.dev
+    restart: always
+    environment:
+      PORT: ${FRONTEND_PORT}
+    ports:
+      - "11001:3000"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/.svelte-kit:/app/.svelte-kit
+      - ./frontend/static:/app/static
+      - ./frontend/tailwind.config.cjs:/app/tailwind.config.cjs
+      - ./.env:/app/.env
+
+  back:
+    container_name: ynoverflow_back
+    build:
+      context: backend
+      dockerfile: backend/Dockerfile.dev
+    restart: always
+    volumes:
+      - ./backend:/app
+    ports:
+      - "11002:3000"
+    environment:
+      PORT: ${BACKEND_PORT}
+
+volumes:
+  ynoverflow-vol:
